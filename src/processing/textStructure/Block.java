@@ -1,15 +1,21 @@
 package processing.textStructure;
 
+import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class represents an arbitrary block of text within a file
  */
 public class Block {
+	private static final String EMPTY_BLOCK = "";
+
 	private long startIdx;                  //index within the file where the block begins
 	private long endIdx;                    //index within the file where the block ends
 	private RandomAccessFile inputFile;     //the RAF object pointing to the physical file in the file system
+	private List<String> metaData;
+	private String entryName;
 
 	/**
 	 * Constructor
@@ -21,6 +27,8 @@ public class Block {
 		inputFile = inputFile;
 		startIdx = startIdx;
 		endIdx = endIdx;
+		metaData = new ArrayList<>();
+
 	}
 
 	///////// getters //////////
@@ -50,7 +58,7 @@ public class Block {
 	 * @return  String of all metadata.
 	 */
 	public List<String> getMeta() {
-		//TODO implement me!!!
+		return metaData;
 	}
 	
 	/**
@@ -58,14 +66,14 @@ public class Block {
 	 * @param metaData A list containing metadata entries related to this block
 	 */
 	public void setMetadata(List<String> metaData){
-	
+		this.metaData = metaData;
 	}
 	/**
 	 * The filename from which this block was extracted
 	 * @return  filename
 	 */
 	public String getEntryName() {
-		//TODO implement me!!!
+		return this.entryName;
 	}
 
 	/**
@@ -74,9 +82,23 @@ public class Block {
 	 */
 	@Override
 	public String toString() {
-		//TODO implement me!!!
+		try {
+			inputFile.seek(startIdx);
+			byte [] fileBytes = new byte[(int)(endIdx - startIdx)];
+			inputFile.readFully(fileBytes);
+			String blockToString = new String(fileBytes);
+			return blockToString;
+
+		} catch (IOException e) {
+			return EMPTY_BLOCK;
+		}
 	}
 
-
-
+	/**
+	 * A method that sets the entry name
+	 * @param entryName - the name of the entry to set
+	 */
+	protected void setEntryName(String entryName){
+		this.entryName = entryName;
+	}
 }

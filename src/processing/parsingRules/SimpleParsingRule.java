@@ -12,7 +12,8 @@ import java.util.regex.Pattern;
 
 /**
  * This class represents a basic parsing rule which splits a text file to blocks of lines.
- * It will try to get anywhere between 1 and 10 lines of text, as long as the last line it grabs is an empty line.
+ * It will try to get anywhere between 1 and 10 lines of text, as long as the last line it
+ * grabs is an empty line.
  */
 public class SimpleParsingRule implements IparsingRule{
 	

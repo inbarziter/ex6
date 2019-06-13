@@ -1,11 +1,12 @@
 package processing.textStructure;
 
 import processing.parsingRules.IparsingRule;
+import utils.MD5;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -13,8 +14,9 @@ import java.util.Iterator;
  * same structure and that can be parsed by the same parsing rule.
  */
 public class Corpus implements Iterable<Entry>{
+	public static final String EMPTY_STRING = "";
 
-	ArrayList<Entry> entryArray;
+	ArrayList<Entry> entryList;
 	IparsingRule theParsingRule;
 
 	public Corpus(String path, IparsingRule parsingRule) throws IOException {
@@ -24,23 +26,23 @@ public class Corpus implements Iterable<Entry>{
         otherwise, recursively scan the directory for all subdirectories and files.
         each entry in a corpus should hold the folder from which the file came.
          */
-		entryArray= new ArrayList<>();
+		entryList = new ArrayList<>();
 		theParsingRule = parsingRule;
 		recursiveEntry(path,theParsingRule);
 	}
 
 	/**
-	 * A recursive function that added all files in the given path to the entryArray
+	 * A recursive function that added all files in the given path to the entryList
 	 * @param path- the path to take the files from
 	 */
-    private void recursiveEntry(String path, IparsingRule parsingRule ){
+    private void recursiveEntry(String path, IparsingRule parsingRule ) throws FileNotFoundException {
 		File directory = new File(path);
 		File[] allFilesInDirectory = directory.listFiles();
 		if (allFilesInDirectory != null) {
 			for(File file: allFilesInDirectory){
 				if(file.isFile() && file.canRead()){
 					Entry newEntry = new Entry(file.getPath(),parsingRule);
-					entryArray.add(newEntry);
+					entryList.add(newEntry);
 					break;
 				}
 				if(file.isDirectory()){
@@ -54,7 +56,7 @@ public class Corpus implements Iterable<Entry>{
 	 * Populates the entries of an empty corpus (a corpus with only entries and no blocks)
 	 */
 	public void populate(){
- 
+		//TODO implement me!!!
 	}
 	
 	/**
@@ -71,7 +73,7 @@ public class Corpus implements Iterable<Entry>{
      */
     @Override
     public Iterator<Entry> iterator() {
-	    //TODO implement me!!!
+	    return entryList.iterator();
     }
 
     /**
@@ -81,7 +83,14 @@ public class Corpus implements Iterable<Entry>{
      * @return
      */
     public String getChecksum() {
-	    //TODO implement me!!!
+    	String sum= EMPTY_STRING;
+	    for(Entry entry: entryList){
+			for (Iterator<Block> it = entry.iterator(); it.hasNext(); ) {
+				Block block = it.next();
+				sum += MD5.getMd5(block.toString());
+			}
+		}
+	    return sum;
     }
 
 
