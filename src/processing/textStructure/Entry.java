@@ -8,13 +8,17 @@ import java.util.Iterator;
  * This class represents a single file within a Corpus
  */
 public class Entry implements Iterable<Block>{
-	/**
+
+    private static String theFilePath;
+    private static IparsingRule theParseRule;
+    /**
 	 * Main constructor
 	 * @param filePath  The path to the file this entry represents
 	 * @param parseRule The parsing rule to be used for this entry
 	 */
     public Entry(String filePath, IparsingRule parseRule) {
-	    //TODO implement me!!!
+        theFilePath = filePath;
+        theParseRule = parseRule;
     }
 
     /**

@@ -18,7 +18,9 @@ public class Block {
 	 * @param endIdx        end index of the block within the file
 	 */
 	public Block(RandomAccessFile inputFile, long startIdx, long endIdx) {
-
+		inputFile = inputFile;
+		startIdx = startIdx;
+		endIdx = endIdx;
 	}
 
 	///////// getters //////////
