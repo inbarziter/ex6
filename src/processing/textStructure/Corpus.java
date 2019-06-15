@@ -32,7 +32,9 @@ public class Corpus implements Iterable<Entry>, Serializable {
          */
 		entryList = new ArrayList<>();
 		this.parsingRule = parsingRule;
-		recursiveEntry(path, this.parsingRule);
+		this.corpusPath = path;
+		recursiveEntry(this.corpusPath, this.parsingRule);
+
 	}
 
 	/**
@@ -59,8 +61,10 @@ public class Corpus implements Iterable<Entry>, Serializable {
 	/**
 	 * Populates the entries of an empty corpus (a corpus with only entries and no blocks)
 	 */
-	public void populate(){
-		//TODO implement me!!!
+	public void populate() throws FileNotFoundException {
+		for(Entry entry: entryList){
+			entry.createBlocks();
+		}
 	}
 	
 	/**
@@ -102,13 +106,14 @@ public class Corpus implements Iterable<Entry>, Serializable {
 	 * @return A String representation of the absolute path to the corpus folder
 	 */
 	public String getPath() {
+		return corpusPath;
 	}
 
 	/**
 	 * Update the RandomAccessFile objects for the Entries in the corpus, if it was loaded from cache.
 	 */
 	public void updateRAFs() {
-
+		//TODO
 	}
 
 }

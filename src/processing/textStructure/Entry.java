@@ -26,12 +26,16 @@ public class Entry implements Iterable<Block>, Serializable {
 	 * @param filePath  The path to the file this entry represents
 	 * @param parseRule The parsing rule to be used for this entry
 	 */
-    public Entry(String filePath, IparsingRule parseRule) throws FileNotFoundException {
+    public Entry(String filePath, IparsingRule parseRule) {
         theFilePath = filePath;
         theParseRule = parseRule;
+
+
+    }
+
+    protected void createBlocks() throws FileNotFoundException {
         blockList = crateBlockList();
         setNameForBlock();
-
     }
 
     /**

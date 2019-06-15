@@ -39,7 +39,7 @@ public class Block {
 	 * @return  filename
 	 */
 	public String getEntryName(){
-
+		return entryName;
 	}
 
 	/**
