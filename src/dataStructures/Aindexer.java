@@ -5,7 +5,9 @@ import processing.searchStrategies.IsearchStrategy;
 import processing.textStructure.Corpus;
 import utils.WrongMD5ChecksumException;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * The abstract class describing the necessary methods and common implementations of all indexing data structures.
@@ -14,6 +16,10 @@ import java.io.FileNotFoundException;
  */
 public abstract class Aindexer<T extends IsearchStrategy> {
 	public static final long serialVersionUID = 1L;
+	private static final String UNDER_LINE = "_";
+	private static String PATH_FOR_CACHE = "/temp/";
+	private static String CACHE_ENDING = ".cache";
+	private static final IndexTypes TYPE_NAME = IndexTypes.DICT;
 
 	public static enum IndexTypes {DICT, NAIVE, NAIVE_RK, SUFFIX_TREE}
     IndexTypes dataStructType;
@@ -32,7 +38,7 @@ public abstract class Aindexer<T extends IsearchStrategy> {
 	 * Main indexing method. Common implementation trying to read indexed cache file
 	 * This method can be edited, but is enough assuming the other methods are implemented well.
 	 */
-	public void index() {
+	public void index() throws IOException, ClassNotFoundException {
     	try {
 			readIndexedFile();
 			origin.updateRAFs();
@@ -63,7 +69,7 @@ public abstract class Aindexer<T extends IsearchStrategy> {
 	 * @throws FileNotFoundException
 	 * @throws WrongMD5ChecksumException
 	 */
-	protected abstract void readIndexedFile() throws FileNotFoundException, WrongMD5ChecksumException;
+	protected abstract void readIndexedFile() throws IOException, WrongMD5ChecksumException, ClassNotFoundException;
 
 
 	/**
@@ -71,13 +77,13 @@ public abstract class Aindexer<T extends IsearchStrategy> {
 	 * @return  the path to the cached index file.
 	 */
 	protected String getIndexedPath() {
-	
+			return findCacheName();
 	}
 
 	/**
 	 * Write the indernal index into file.
 	 */
-	protected abstract void writeIndexFile();
+	protected abstract void writeIndexFile() throws IOException;
 
 
 
@@ -98,4 +104,9 @@ public abstract class Aindexer<T extends IsearchStrategy> {
 	 * @return  Regerence to the origin Corpus
 	 */
 	public Corpus getCorpus(){return  this.origin;}
+
+	protected String findCacheName(File fileToCache){
+		return TYPE_NAME +UNDER_LINE+ getParseRule()+UNDER_LINE+ fileToCache.getName() + CACHE_ENDING;
+	}
 }
+
