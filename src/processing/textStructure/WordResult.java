@@ -3,39 +3,59 @@ package processing.textStructure;
 import java.io.IOException;
 
 /**
- * This wrapper class describes a query result for a single word.
+ * This class represents a result containing a single string (single word or multiple words treated as one)
  */
-public class WordResult  {
-	private long idxInBlk;  // The offset of the word within the block
-	Block sourceBlock;       // The block in which this word was found
-	protected String content; // The word(s) that were found
+public class WordResult {
+    private long idxInBlk;
+    Block location;
+    protected String[] content;
 
+    /**
+     * Simple constructor without index.
+     * @param blk The block where this word was found
+     * @param word  The word queried, represented as an array of size 1.
+     */
+    private WordResult(Block blk, String[] word){
+        this.content = word;
+        this.location = blk;
+    }
 
-	private WordResult(Block loc, String pattern) {
-		this.sourceBlock = loc;
-		this.content = pattern;
-	}
+    /**
+     * Constructor containing index of word in block
+     * @param blk The block where this word was found
+     * @param word  The word queried, represented as an array of size 1.
+     * @param idx   The index within the block where the word was found.
+     */
+    public WordResult(Block blk, String[] word, long idx) {
+        this(blk, word);
+        this.idxInBlk = idx;
+    }
 
-	public WordResult(Block blk, String words, long idx) {
-		this(blk, words);
-		this.idxInBlk = idx;
-	}
+    /**
+     * Getter for the result's block
+     * @return  The block where this word was found.
+     */
+    public Block getBlock(){
+        return this.location;
+    }
 
-	public Block getBlock() {
-		return this.sourceBlock;
-	}
+	/**
+	 * Getter for the queried word for this result
+	 * @return The query word that generated this result
+	 */
+	public String[] getWord(){
+        return this.content;
+    }
 
-	public String getWord() {
-		return this.content;
-	}
-
+	/**
+	 * Method for printing the result
+	 * @return The result representation as defined by the "printing results" requirement in the exercise instructions.
+	 * @throws IOException
+	 */
 	public String resultToString() throws IOException {
-		//TODO implement me!!
-	}
+	
+    }
 
-	public String getSourceEntry() {
-		return this.sourceBlock.getEntryName();
-	}
 
 
 }

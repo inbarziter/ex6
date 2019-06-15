@@ -10,11 +10,12 @@ import java.io.FileNotFoundException;
 /**
  * The abstract class describing the necessary methods and common implementations of all indexing data structures.
  * @param <T>   The search stratagy used by this indexing engine. Can be any class that implements the
- *                  IsearchStrategy interface.
+ *           IsearchStrategy interface.
  */
 public abstract class Aindexer<T extends IsearchStrategy> {
+	public static final long serialVersionUID = 1L;
 
-	public static enum IndexTypes {DICT, NAIVE, NAIVE_RK, SUFFIX_TREE, CUSTOM}
+	public static enum IndexTypes {DICT, NAIVE, NAIVE_RK, SUFFIX_TREE}
     IndexTypes dataStructType;
     protected Corpus origin;
 
@@ -29,18 +30,21 @@ public abstract class Aindexer<T extends IsearchStrategy> {
 
 	/**
 	 * Main indexing method. Common implementation trying to read indexed cache file
-	 * This method must:
-	 * 1) Try and reada a cached index file if one exists, and if so - populate the entire span of the program from the serialized data
-	 * 2) If a cache file does not exist, or if the checksum stored in the file does not match the checksum of the current corpus,
-	 *    you must reindex the corpus and then store the cache file to disk (replacing any older file that may exist).
+	 * This method can be edited, but is enough assuming the other methods are implemented well.
 	 */
 	public void index() {
-		try {
+    	try {
 			readIndexedFile();
+			origin.updateRAFs();
+			System.out.println("success on reading index from file");
 		} catch (FileNotFoundException | WrongMD5ChecksumException e) {
+    	    origin.populate();
 			indexCorpus();
 			writeIndexFile();
+			System.out.println("success on indexing file");
+
 		}
+    	
     }
 
 	/**
@@ -56,36 +60,38 @@ public abstract class Aindexer<T extends IsearchStrategy> {
 
 	/**
 	 * Try to read a cached index file if one already exists.
-	 * NOTE! you may make this method not abstract if you wish.
+	 * @throws FileNotFoundException
+	 * @throws WrongMD5ChecksumException
 	 */
 	protected abstract void readIndexedFile() throws FileNotFoundException, WrongMD5ChecksumException;
 
 
 	/**
-	 * Getter for the cached index file.
+	 * Getter for the cached index file path.
 	 * @return  the path to the cached index file.
 	 */
-	private String getIndexedPath() {
-		//TODO implement me!!!
+	protected String getIndexedPath() {
+	
 	}
 
 	/**
 	 * Write the indernal index into file.
-	 * NOTE! you may make this method not abstract if you wish.
 	 */
 	protected abstract void writeIndexFile();
+
+
 
 	/**
 	 * Extract the parsing rule used for indexing this data structure.
 	 * @return  an instance of a parser implementing IparsingRule
 	 */
 	public abstract IparsingRule getParseRule();
-
-	/**
-	 * simple getter
-	 * @return  the DS type
-	 */
-    protected abstract IndexTypes getIndexType();
+//
+//	/**
+//	 * simple getter
+//	 * @return  the DS type
+//	 */
+//    protected abstract IndexTypes getIndexType();
 
 	/**
 	 * simple getter

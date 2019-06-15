@@ -4,6 +4,7 @@ import processing.parsingRules.IparsingRule;
 
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,10 +13,11 @@ import java.util.regex.Pattern;
 /**
  * This class represents a single file within a Corpus
  */
-public class Entry implements Iterable<Block>{
+public class Entry implements Iterable<Block>, Serializable {
     private static final String SEPARATOR = "\\";
     private static final String READING = "r";
 
+    public static final long serialVersionUID = 1L;
     private static String theFilePath;
     private static IparsingRule theParseRule;
     private static List<Block> blockList;

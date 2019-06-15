@@ -11,6 +11,7 @@ import java.util.List;
 public class Block {
 	private static final String EMPTY_BLOCK = "";
 
+	public static final long serialVersionUID = 1L;
 	private long startIdx;                  //index within the file where the block begins
 	private long endIdx;                    //index within the file where the block ends
 	private RandomAccessFile inputFile;     //the RAF object pointing to the physical file in the file system
@@ -24,14 +25,23 @@ public class Block {
 	 * @param endIdx        end index of the block within the file
 	 */
 	public Block(RandomAccessFile inputFile, long startIdx, long endIdx) {
-		inputFile = inputFile;
-		startIdx = startIdx;
-		endIdx = endIdx;
+		this.inputFile = inputFile;
+		this.startIdx = startIdx;
+		this.endIdx = endIdx;
 		metaData = new ArrayList<>();
 
 	}
 
 	///////// getters //////////
+
+	/**
+	 * The filename from which this block was extracted
+	 * @return  filename
+	 */
+	public String getEntryName(){
+
+	}
+
 	/**
 	 * @return start index
 	 */
@@ -57,7 +67,7 @@ public class Block {
 	 * Get the metadata of the block, if applicable for the parsing rule used
 	 * @return  String of all metadata.
 	 */
-	public List<String> getMeta() {
+	public List<String> getMetadata() {
 		return metaData;
 	}
 	
@@ -68,13 +78,7 @@ public class Block {
 	public void setMetadata(List<String> metaData){
 		this.metaData = metaData;
 	}
-	/**
-	 * The filename from which this block was extracted
-	 * @return  filename
-	 */
-	public String getEntryName() {
-		return this.entryName;
-	}
+
 
 	/**
 	 * Convert an abstract block into a string

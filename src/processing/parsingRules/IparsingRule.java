@@ -12,7 +12,9 @@ import java.util.List;
  */
 public interface IparsingRule {
 	enum ParserTypes {SIMPLE, ST_MOVIE, ST_TV}
+	public static long SerialVersionUID =1;
 	int MAXLINELENGTH = 256;
+
 
 	/**
 	 * A parser for a single block of text
@@ -38,7 +40,7 @@ public interface IparsingRule {
 	default String getMatcherRegex(String[] qWords) {
 		StringBuilder matchAllWordsRegex = new StringBuilder();
 		for (String word : qWords){
-			matchAllWordsRegex.append("(").append(word).append(").*?");
+			matchAllWordsRegex.append("((").append(word).append(")).*?");
 		}
 		matchAllWordsRegex.append("\n");
 		return matchAllWordsRegex.toString();

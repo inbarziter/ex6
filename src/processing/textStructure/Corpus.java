@@ -6,6 +6,7 @@ import utils.MD5;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -13,11 +14,14 @@ import java.util.Iterator;
  * This class represents a body of works - anywhere between one and thousands of documents sharing the
  * same structure and that can be parsed by the same parsing rule.
  */
-public class Corpus implements Iterable<Entry>{
+public class Corpus implements Iterable<Entry>, Serializable {
 	public static final String EMPTY_STRING = "";
+	public static final long serialVersionUID = 1L;
 
-	ArrayList<Entry> entryList;
-	IparsingRule theParsingRule;
+	private ArrayList<Entry> entryList;
+	private IparsingRule parsingRule;
+	private String corpusPath;
+
 
 	public Corpus(String path, IparsingRule parsingRule) throws IOException {
         /*
@@ -27,8 +31,8 @@ public class Corpus implements Iterable<Entry>{
         each entry in a corpus should hold the folder from which the file came.
          */
 		entryList = new ArrayList<>();
-		theParsingRule = parsingRule;
-		recursiveEntry(path,theParsingRule);
+		this.parsingRule = parsingRule;
+		recursiveEntry(path, this.parsingRule);
 	}
 
 	/**
@@ -64,7 +68,7 @@ public class Corpus implements Iterable<Entry>{
 	 * @return
 	 */
 	public IparsingRule getParsingRule() {
-		return theParsingRule;
+		return this.parsingRule;
 	}
 
     /**
@@ -73,7 +77,7 @@ public class Corpus implements Iterable<Entry>{
      */
     @Override
     public Iterator<Entry> iterator() {
-	    return entryList.iterator();
+	    return this.entryList.iterator();
     }
 
     /**
@@ -82,7 +86,7 @@ public class Corpus implements Iterable<Entry>{
      * returning the checksum of that string.
      * @return
      */
-    public String getChecksum() {
+    public String getChecksum() throws IOException {
     	String sum= EMPTY_STRING;
 	    for(Entry entry: entryList){
 			for (Iterator<Block> it = entry.iterator(); it.hasNext(); ) {
@@ -93,5 +97,18 @@ public class Corpus implements Iterable<Entry>{
 	    return sum;
     }
 
+	/**
+	 * The path to the corpus folder
+	 * @return A String representation of the absolute path to the corpus folder
+	 */
+	public String getPath() {
+	}
+
+	/**
+	 * Update the RandomAccessFile objects for the Entries in the corpus, if it was loaded from cache.
+	 */
+	public void updateRAFs() {
+
+	}
 
 }

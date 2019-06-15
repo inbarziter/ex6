@@ -5,18 +5,20 @@ import processing.textStructure.WordResult;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * This class represents a basic parsing rule which splits a text file to blocks of lines.
- * It will try to get anywhere between 1 and 10 lines of text, as long as the last line it
- * grabs is an empty line.
- */
-public class SimpleParsingRule implements IparsingRule{
-	
+public class SimpleParsingRule implements IparsingRule, Serializable {
+	public static final long serialVersionUID = 1L;
+
+	public SimpleParsingRule() {
+
+    }
+
+
 
 	@Override
 	public Block parseRawBlock(RandomAccessFile inputFile, long startPos, long endPos) {
@@ -33,9 +35,8 @@ public class SimpleParsingRule implements IparsingRule{
 		List<Block> entryBlocks = new LinkedList<>();
 		int rawChunkSize = MAXLINELENGTH * 15;
 		byte[] rawBytes = new byte[rawChunkSize];
-		String sentence = "";
 		try {
-			long endOfBlockOffset = 0;
+			long endOfBlockOffset = 0, curBlockEnd;
 			Long lastIndex = inputFile.length();
 			for (long i = endOfBlockOffset; i < lastIndex; i += rawChunkSize) {
 				inputFile.seek(i);
@@ -43,7 +44,7 @@ public class SimpleParsingRule implements IparsingRule{
 				String rawBlock = new String(rawBytes);
 				m.reset(rawBlock);
 				while (m.find()) {
-					if (m.end()-m.start() > 5) {
+					if (m.end()-m.start() > 1) {
 						entryBlocks.add(parseRawBlock(inputFile, m.start() + i, m.end() + i));
 					}
 					endOfBlockOffset = m.end();
@@ -63,11 +64,10 @@ public class SimpleParsingRule implements IparsingRule{
 	@Override
 	public void printResult(WordResult wordResult) throws IOException {
 		System.out.println("The result: \n" +wordResult.resultToString());
-		System.out.println("Appears in the file: "+wordResult.getSourceEntry());
 	}
 
 	private String getSplitRegex() {
-		return "(.*\\n\\n){1,10}";
+		return "(.*\\n\\n){1,5}";
 	}
 
 

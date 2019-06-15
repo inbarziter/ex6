@@ -5,9 +5,6 @@ import processing.parsingRules.IparsingRule;
 import processing.searchStrategies.NaiveSearch;
 import processing.searchStrategies.NaiveSearchRK;
 import processing.textStructure.Corpus;
-import utils.WrongMD5ChecksumException;
-
-import java.io.FileNotFoundException;
 
 /**
  * A "naive" indexer. This approach forgoes actually preprocessing the file, and simply loads the text and searches directly on it.
@@ -15,7 +12,7 @@ import java.io.FileNotFoundException;
 public class NaiveIndexer extends Aindexer<NaiveSearch> {
 
 	public static final IndexTypes TYPE_NAME = IndexTypes.NAIVE;
-	private final NaiveSearch searchStratagy;
+	private final boolean isRK;
 
 	/**
 	 * Basic constructor
@@ -24,12 +21,13 @@ public class NaiveIndexer extends Aindexer<NaiveSearch> {
 	 */
 	public NaiveIndexer(Corpus corpus, boolean RK){
 		super(corpus);
-		this.searchStratagy = RK? new NaiveSearchRK(this.origin) : new NaiveSearch(this.origin);
+		this.isRK = RK;
 	}
 
 
 	public NaiveIndexer(Corpus corpus) {
-		this(corpus, false);
+		super(corpus);
+		this.isRK = false;
 	}
 
 	@Override
@@ -38,33 +36,20 @@ public class NaiveIndexer extends Aindexer<NaiveSearch> {
 	}
 
 	@Override
-	protected void readIndexedFile() throws FileNotFoundException, WrongMD5ChecksumException {
-		// does nothing
-	}
-
-	@Override
-	protected void castRawData(Object readObject) {
-		// does nothing
+	protected void readIndexedFile(){
+		//does nothing
 	}
 
 	@Override
 	protected void writeIndexFile() {
-		// does nothing
+		//does nothing
 	}
 
-	/**
-	 * Get the source Corpus of this indexer
-	 * @return
-	 */
+
 	public Corpus getOrigin() {
 		return this.origin;
 	}
 
-
-	@Override
-	protected IndexTypes getIndexType() {
-		return TYPE_NAME;
-	}
 
 	@Override
 	public IparsingRule getParseRule() {
@@ -74,7 +59,7 @@ public class NaiveIndexer extends Aindexer<NaiveSearch> {
 
 	@Override
 	public NaiveSearch asSearchInterface() {
-		return this.searchStratagy;
+		return this.isRK ? new NaiveSearch(this.origin) : new NaiveSearchRK(this.origin);
 	}
 
 

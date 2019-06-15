@@ -4,6 +4,7 @@ import dataStructures.Aindexer;
 import processing.parsingRules.IparsingRule;
 import processing.searchStrategies.DictionarySearch;
 import processing.textStructure.Corpus;
+import utils.Stemmer;
 import utils.WrongMD5ChecksumException;
 
 import java.io.FileNotFoundException;
@@ -13,44 +14,49 @@ import java.io.FileNotFoundException;
  * locations within the files.
  */
 public class DictionaryIndexer extends Aindexer<DictionarySearch> {
+	
+	private static final Stemmer STEMMER = new Stemmer();
+	public static final IndexTypes TYPE_NAME = IndexTypes.DICT;
 
 	/**
 	 * Basic constructor, sets origin Corpus and initializes backing hashmap
 	 * @param origin    the Corpus to be indexed by this DS.
 	 */
 	public DictionaryIndexer(Corpus origin) {
-
+	
 	}
 
+
 	@Override
-	public DictionarySearch asSearchInterface() {
+	protected void readIndexedFile() throws WrongMD5ChecksumException, FileNotFoundException {
 	
+
+
+
+	}
+	@Override
+	protected void writeIndexFile() {
+	
+
 	}
 
 	@Override
 	protected void indexCorpus() {
-
-	}
-
-	@Override
-	protected void readIndexedFile() throws FileNotFoundException, WrongMD5ChecksumException {
-
-	}
 	
-	@Override
-	protected void writeIndexFile() {
-
 	}
+
 
 	@Override
 	public IparsingRule getParseRule() {
 	
 	}
 
+	
 	@Override
-	protected IndexTypes getIndexType() {
+	public DictionarySearch asSearchInterface() {
 	
 	}
+
 
 
 }
